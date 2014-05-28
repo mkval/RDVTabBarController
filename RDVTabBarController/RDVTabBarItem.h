@@ -133,4 +133,7 @@
  */
 @property (nonatomic) UIFont *badgeTextFont;
 
+
+- (id)initWithTitle:(NSString *)title image:(UIImage *)image selectedImage:(UIImage *)selectedImage;
+
 @end

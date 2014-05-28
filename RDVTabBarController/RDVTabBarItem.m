@@ -59,6 +59,14 @@
     return [self initWithFrame:CGRectZero];
 }
 
+- (id)initWithTitle:(NSString *)title image:(UIImage *)image selectedImage:(UIImage *)selectedImage {
+  self = [super init];
+  if (!self) return nil;
+  self.title = title;
+  [self setFinishedSelectedImage:selectedImage withFinishedUnselectedImage:image];
+  return self;
+}
+
 - (void)commonInitialization {
     // Setup defaults
     
