@@ -32,6 +32,10 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         self.title = @"First";
+        RDVTabBarItem *barItem = [[RDVTabBarItem alloc] init];
+        barItem.itemWidth = 80;
+        barItem.title = self.title;
+        self.rdv_tabBarItem = barItem;
     }
     return self;
 }
@@ -40,7 +44,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     [[self rdv_tabBarItem] setBadgeValue:@"3"];
     
     if (self.rdv_tabBarController.tabBar.translucent) {

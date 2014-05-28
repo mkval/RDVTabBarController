@@ -73,20 +73,26 @@
     NSInteger index = 0;
     
     // Layout items
-    
+  
+    CGFloat horizontalOffset = 0;
     for (RDVTabBarItem *item in [self items]) {
         CGFloat itemHeight = [item itemHeight];
-        
+        CGFloat itemWidth = [item itemWidth];
+      
         if (!itemHeight) {
             itemHeight = frameSize.height;
         }
+        if (!itemWidth) {
+            itemWidth = self.itemWidth;
+        }
         
-        [item setFrame:CGRectMake(self.contentEdgeInsets.left + (index * self.itemWidth),
+        [item setFrame:CGRectMake(self.contentEdgeInsets.left + horizontalOffset,
                                   roundf(frameSize.height - itemHeight) - self.contentEdgeInsets.top,
-                                  self.itemWidth, itemHeight - self.contentEdgeInsets.bottom)];
+                                  itemWidth, itemHeight - self.contentEdgeInsets.bottom)];
         [item setNeedsDisplay];
         
         index++;
+        horizontalOffset += itemWidth;
     }
 }
 

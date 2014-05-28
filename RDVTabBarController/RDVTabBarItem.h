@@ -30,6 +30,11 @@
  */
 @property CGFloat itemHeight;
 
+/**
+ * This gives client apps the freedom to customize the width of this item.
+ */
+@property CGFloat itemWidth;
+
 #pragma mark - Title configuration
 
 /**

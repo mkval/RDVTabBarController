@@ -119,10 +119,21 @@
         NSMutableArray *tabBarItems = [[NSMutableArray alloc] init];
         
         for (UIViewController *viewController in viewControllers) {
-            RDVTabBarItem *tabBarItem = [[RDVTabBarItem alloc] init];
-            [tabBarItem setTitle:viewController.title];
-            [tabBarItems addObject:tabBarItem];
-            [viewController rdv_setTabBarController:self];
+            UIViewController *viewControllerRef = viewController;
+            if ([viewController isKindOfClass:UINavigationController.class]) {
+                UINavigationController *nc = (UINavigationController *)viewController;
+                viewControllerRef = (UIViewController *)nc.viewControllers[0];
+            }
+            if (viewControllerRef.rdv_tabBarItem) {
+                [tabBarItems addObject:viewControllerRef.rdv_tabBarItem];
+            } else {
+                RDVTabBarItem *tabBarItem = [[RDVTabBarItem alloc] init];
+                [tabBarItem setTitle:viewControllerRef.title];
+                [tabBarItems addObject:tabBarItem];
+            }
+            
+            [viewControllerRef rdv_setTabBarController:self];
+          
         }
         
         [[self tabBar] setItems:tabBarItems];
@@ -265,6 +276,8 @@
 
 @implementation UIViewController (RDVTabBarControllerItem)
 
+static const char* rdv_tabBarItemKey = "RDVTabBarController_TabBarItem";
+
 - (RDVTabBarController *)rdv_tabBarController {
     RDVTabBarController *tabBarController = objc_getAssociatedObject(self, @selector(rdv_tabBarController));
     
@@ -276,24 +289,11 @@
 }
 
 - (RDVTabBarItem *)rdv_tabBarItem {
-    RDVTabBarController *tabBarController = [self rdv_tabBarController];
-    NSInteger index = [tabBarController indexForViewController:self];
-    return [[[tabBarController tabBar] items] objectAtIndex:index];
+    return objc_getAssociatedObject(self, rdv_tabBarItemKey);
 }
 
 - (void)rdv_setTabBarItem:(RDVTabBarItem *)tabBarItem {
-    RDVTabBarController *tabBarController = [self rdv_tabBarController];
-    
-    if (!tabBarController) {
-        return;
-    }
-    
-    RDVTabBar *tabBar = [tabBarController tabBar];
-    NSInteger index = [tabBarController indexForViewController:self];
-    
-    NSMutableArray *tabBarItems = [[NSMutableArray alloc] initWithArray:[tabBar items]];
-    [tabBarItems replaceObjectAtIndex:index withObject:tabBarItem];
-    [tabBar setItems:tabBarItems];
+    objc_setAssociatedObject(self, rdv_tabBarItemKey, tabBarItem, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 @end

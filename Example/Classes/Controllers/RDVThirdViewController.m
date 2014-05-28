@@ -23,6 +23,7 @@
 
 #import "RDVThirdViewController.h"
 #import "RDVTabBarController.h"
+#import "RDVTabBarItem.h"
 
 @implementation RDVThirdViewController
 
@@ -31,6 +32,10 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         self.title = @"Third";
+        RDVTabBarItem *barItem = [[RDVTabBarItem alloc] init];
+        barItem.itemWidth = 80;
+        barItem.title = self.title;
+        self.rdv_tabBarItem = barItem;
     }
     return self;
 }
@@ -39,7 +44,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     if (self.rdv_tabBarController.tabBar.translucent) {
         UIEdgeInsets insets = UIEdgeInsetsMake(0,
                                                0,
