@@ -276,8 +276,6 @@
 
 @implementation UIViewController (RDVTabBarControllerItem)
 
-static const char* rdv_tabBarItemKey = "RDVTabBarController_TabBarItem";
-
 - (RDVTabBarController *)rdv_tabBarController {
     RDVTabBarController *tabBarController = objc_getAssociatedObject(self, @selector(rdv_tabBarController));
     
@@ -289,11 +287,11 @@ static const char* rdv_tabBarItemKey = "RDVTabBarController_TabBarItem";
 }
 
 - (RDVTabBarItem *)rdv_tabBarItem {
-    return objc_getAssociatedObject(self, rdv_tabBarItemKey);
+    return objc_getAssociatedObject(self, @selector(rdv_tabBarItem));
 }
 
 - (void)rdv_setTabBarItem:(RDVTabBarItem *)tabBarItem {
-    objc_setAssociatedObject(self, rdv_tabBarItemKey, tabBarItem, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, @selector(rdv_tabBarItem), tabBarItem, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 @end
