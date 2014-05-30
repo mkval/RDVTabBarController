@@ -119,20 +119,31 @@
         NSMutableArray *tabBarItems = [[NSMutableArray alloc] init];
         
         for (UIViewController *viewController in viewControllers) {
-            UIViewController *viewControllerRef = viewController;
+            NSString *title = viewController.title;
+            RDVTabBarItem *tabBarItem = viewController.rdv_tabBarItem;
+
             if ([viewController isKindOfClass:UINavigationController.class]) {
                 UINavigationController *nc = (UINavigationController *)viewController;
-                viewControllerRef = (UIViewController *)nc.viewControllers[0];
+
+                // Prefer title and tabBarItem of nav controller's root VC if available.
+                if (nc.viewControllers.count > 0) {
+                    UIViewController *vc = (UIViewController *)nc.viewControllers[0];
+                    if (vc.title)
+                        title = vc.title;
+                    if (vc.rdv_tabBarItem)
+                        tabBarItem = vc.rdv_tabBarItem;
+                }
             }
-            if (viewControllerRef.rdv_tabBarItem) {
-                [tabBarItems addObject:viewControllerRef.rdv_tabBarItem];
+
+            if (tabBarItem) {
+                [tabBarItems addObject:tabBarItem];
             } else {
                 RDVTabBarItem *tabBarItem = [[RDVTabBarItem alloc] init];
-                [tabBarItem setTitle:viewControllerRef.title];
+                [tabBarItem setTitle:title];
                 [tabBarItems addObject:tabBarItem];
             }
             
-            [viewControllerRef rdv_setTabBarController:self];
+            [viewController rdv_setTabBarController:self];
           
         }
         
